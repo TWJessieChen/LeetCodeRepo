@@ -7,14 +7,18 @@ class ListNode constructor(var value: Int = -1, var next: ListNode? = null) {
 
     companion object {
         // a help function to generate a linked list with given values quickly, for test purpose only
-        fun quickList(nodes: List<Int>): ListNode {
+        fun quickList(nodes: List<Int>): ListNode? {
             val dummy = ListNode()
             nodes.reversed().forEach({
                 val temp = ListNode(it)
                 temp.next = dummy.next
                 dummy.next = temp
             })
-            return dummy.next!!
+            if(dummy.next != null) {
+                return dummy.next!!
+            } else {
+                return null
+            }
         }
     }
 }
