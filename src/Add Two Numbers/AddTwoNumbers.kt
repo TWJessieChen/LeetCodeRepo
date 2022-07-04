@@ -1,6 +1,5 @@
 package `Add Two Numbers`
 
-import `Two Sum`.TwoSum
 import utils.ListNode
 
 /**
@@ -10,6 +9,7 @@ import utils.ListNode
  * 在 Kotlin 解題需要注意的是 val 是關鍵字
  * 所以需要 以 `` 標記
  *
+ * 網站 : https://leetcode.com/problems/add-two-numbers/
  *
  * */
 

@@ -14,10 +14,11 @@ package `Two Sum`
  * 這樣的話，只需要從頭到尾遍歷一次陣列
  * 即可找到答案
  *
+ *  網站 : https://leetcode.com/problems/two-sum/
  *
  * */
 
-fun TwoSum(nums: IntArray, target: Int): IntArray {
+fun twoSum(nums: IntArray, target: Int): IntArray {
     val map = hashMapOf<Int, Int>()
     for (i in nums.indices) {
         if (map.containsKey(target - nums[i])) {
@@ -43,7 +44,7 @@ fun main() {
      * Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
      */
     val number_test1: IntArray = intArrayOf(2,7,11,15)
-    val r1 = TwoSum(number_test1,9)
+    val r1 = twoSum(number_test1,9)
     printResult(r1)
 
     /**
@@ -52,7 +53,7 @@ fun main() {
      * Output: [1,2]
      */
     val number_test2: IntArray = intArrayOf(3,2,4)
-    val r2 = TwoSum(number_test2,6)
+    val r2 = twoSum(number_test2,6)
     printResult(r2)
 
     /**
@@ -61,9 +62,8 @@ fun main() {
      * Output: [0,1]
      */
     val number_test3: IntArray = intArrayOf(3,3)
-    val r3 = TwoSum(number_test3,6)
+    val r3 = twoSum(number_test3,6)
     printResult(r3)
-
 
 }
 
