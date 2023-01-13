@@ -11,7 +11,7 @@ import utils.ListNode
  * 就可以計算出缺少的數字
  * 這樣的演算法
  * 時間複雜度會是 O(n)
- * (nums.size * (nums.size + 1)) / 2 : 特殊的算法
+ * (nums.size * (nums.size + 1)) / 2 : 特殊的算法(總數算法，數學公式)
  *
  * 網站 : https://leetcode.com/problems/missing-number/
  *
