@@ -13,32 +13,30 @@ import utils.ListNode
  *
  * */
 
-fun addTwoNumbers(a: ListNode, b: ListNode): ListNode {
-    val dummy = ListNode()
-    var cur: ListNode = dummy
-    var pa: ListNode? = a
-    var pb: ListNode? = b
-    var sum: Int
+fun addTwoNumbers(l1: ListNode?, l2: ListNode?): ListNode? {
+    // p1, p2 現在是可為 null，才能在迴圈中安全地往下走
+    var p1 = l1
+    var p2 = l2
     var carry = 0
-    while (pa != null || pb != null) {
-        sum = carry
-        if (pa != null) {
-            sum += pa.value
-            pa = pa.next
-        }
-        if (pb != null) {
-            sum += pb.value
-            pb = pb.next
-        }
+    val dummy = ListNode(0)
+    var current = dummy
+
+    while (p1 != null || p2 != null || carry != 0) {
+        // 若 p1 或 p2 為 null，就取 0
+        val x = p1?.value ?: 0
+        val y = p2?.value ?: 0
+        val sum = x + y + carry
+
         carry = sum / 10
-        cur.next = ListNode(sum % 10)
-        cur = cur.next as ListNode
-    }
-    if (carry > 0) {
-        cur.next = ListNode(carry)
+        current.next = ListNode(sum % 10)
+        current = current.next!!
+
+        // 往下走時，也要用安全呼叫
+        p1 = p1?.next
+        p2 = p2?.next
     }
 
-    return dummy.next!!
+    return dummy.next
 }
 
 fun main() {
@@ -49,7 +47,7 @@ fun main() {
      * Explanation: 342 + 465 = 807.
      */
     println(addTwoNumbers(ListNode.quickList(arrayListOf(2, 4, 3))!!,
-            ListNode.quickList(arrayListOf(5, 6, 4))!!))
+        ListNode.quickList(arrayListOf(5, 6, 4))!!))
 
     /**
      * Example 2:
