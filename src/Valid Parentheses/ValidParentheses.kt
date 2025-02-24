@@ -3,39 +3,99 @@ package `Valid Parentheses`
 
 /**
  *
- * 解題思路
- * 這題可以很簡單的用 stack 來進行處理
- * 在 Kotlin 裏面，我們可以用 Deque 來協助我們建立一個 stack
+ * 解題思路(Easy)
  *
- * 網站 : https://leetcode.com/problems/valid-parentheses/
+ * 網站 : https://leetcode.com/problems/valid-parentheses/description/
+ *
+ * 題目解釋 :
+ *
+ *  給定一個只包含以下六個字符的字串：
+ * 	•	左括號：(, {, [
+ * 	•	右括號：), }, ]
+ *
+ * 要求判斷這個字串是否「有效」，也就是說必須滿足以下三個條件：
+ * 	1.	每個開括號必須由相同類型的閉括號閉合
+ * 例如：( 必須由 ) 關閉，{ 必須由 } 關閉，[ 必須由 ] 關閉。
+ * 	2.	開括號必須以正確的順序閉合
+ * 例如：字串 "([)]" 雖然每個括號都有相應的閉括號，但順序錯誤，因此無效；而 "([])" 則是正確的。
+ * 	3.	每個閉括號必須有對應的未閉合的開括號
+ * 例如：字串 ")(" 就是無效的，因為第一個 ) 沒有對應的開括號。
+ *
+ *  解題思路
+ *
+ * 一個常見且直觀的解法是使用堆疊 (Stack)，其主要思路如下：
+ * 	1.	遍歷字串中的每個字符：
+ * 	•	如果當前字符是開括號（如 '('、'{'、'['），則將其推入堆疊。
+ * 	•	如果當前字符是閉括號（如 ')'、'}'、']'），則檢查堆疊：
+ * 	•	如果堆疊為空，表示沒有對應的開括號，則字串無效。
+ * 	•	否則，取出堆疊頂端的元素，檢查是否與當前的閉括號相匹配（例如，'(' 與 ')' 匹配）。
+ * 	•	如果不匹配，則字串無效。
+ * 	2.	結束遍歷後檢查堆疊：
+ * 	•	如果堆疊不為空，說明還有未被閉合的開括號，則字串無效。
+ * 	•	如果堆疊為空，則所有括號都正確匹配，字串有效。
+ *
+ * 這個解法的時間複雜度是 O(n)（n 為字串長度），空間複雜度也是 O(n)（最壞情況所有字符都為開括號）。
+ *
+ * 舉例驗證
+ * 	1.	Example 1: s = “()”
+ * 	•	遍歷：
+ * 	•	遇到 ( → 推入堆疊。
+ * 	•	遇到 ) → 檢查堆疊頂部是否為 (（匹配），彈出堆疊。
+ * 	•	結束遍歷後，堆疊為空 → 返回 true。
+ * 	2.	Example 2: s = “()[]{}”
+ * 	•	遍歷過程：
+ * 	•	遇到 ( → 推入堆疊。
+ * 	•	遇到 ) → 檢查匹配 → 彈出。
+ * 	•	遇到 [ → 推入堆疊。
+ * 	•	遇到 ] → 檢查匹配 → 彈出。
+ * 	•	遇到 { → 推入堆疊。
+ * 	•	遇到 } → 檢查匹配 → 彈出。
+ * 	•	堆疊為空 → 返回 true。
+ * 	3.	Example 3: s = “(]”
+ * 	•	遍歷過程：
+ * 	•	遇到 ( → 推入堆疊。
+ * 	•	遇到 ] → 檢查堆疊頂部（(）是否匹配：
+ * 	•	Map 中 ']' 對應的開括號為 '['，但堆疊頂部是 '('，不匹配 → 返回 false。
+ * 	4.	Example 4: s = “([])”
+ * 	•	遍歷過程：
+ * 	•	遇到 ( → 推入堆疊。
+ * 	•	遇到 [ → 推入堆疊。
+ * 	•	遇到 ] → 檢查堆疊頂部是否為 [（匹配） → 彈出。
+ * 	•	遇到 ) → 檢查堆疊頂部是否為 (（匹配） → 彈出。
+ * 	•	堆疊為空 → 返回 true。
  *
  * */
 
 fun isValid(s: String): Boolean {
-    var deque = ArrayDeque<Char>()
+    // 建立一個堆疊用來存放開括號
+    val stack = ArrayDeque<Char>()
 
-    for (i in 0..s.length-1) {
-        var character = s.get(i)
-        println(character)
-        if (character == '(' || character == '[' || character == '{')
-        {
-            deque.addFirst(character)
-            continue;
+    // 定義一個 Map，將閉括號映射到對應的開括號
+    val matching = mapOf(')' to '(', ']' to '[', '}' to '{')
+
+    // 遍歷字串中的每個字符
+    for (c in s) {
+        // 如果字符是開括號 (在 Map 的值集合中)
+        if (c in matching.values) {
+            // 推入堆疊
+            stack.addLast(c)
         }
-        if (deque.isEmpty()) {
-            return false;
-        }
-        when (character) {
-            ')' -> if (deque.first() == '(') {deque.removeFirst()} else { return false }
-            ']' -> if (deque.first() == '[') {deque.removeFirst()} else { return false }
-            '}' -> if (deque.first() == '{') {deque.removeFirst()} else { return false }
-            else -> return false
+        // 如果字符是閉括號 (在 Map 的鍵集合中)
+        else if (c in matching.keys) {
+            // 如果堆疊為空，表示沒有對應的開括號
+            if (stack.isEmpty()) return false
+
+            // 從堆疊中取出最近的開括號，並檢查是否匹配
+            val top = stack.removeLast()
+            if (top != matching[c]) {
+                // 若不匹配，返回 false
+                return false
+            }
         }
     }
-    if(!deque.isEmpty()){
-        return false
-    }
-    return true
+
+    // 遍歷結束後，如果堆疊不為空，表示仍有未閉合的開括號
+    return stack.isEmpty()
 }
 
 fun main() {
